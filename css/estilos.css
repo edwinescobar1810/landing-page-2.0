@@ -771,15 +771,128 @@ video {
 }
 
 #card_img {
-    height: 25em;
+    height: 19rem;
 }
 
-#precioActual{
+#precioActual {
     color: #007e78;
-    font-size: 20px;
+    font-size: 90%;
+    font-weight: bold;
+    text-align: left;
+}
+
+#precioActualEmprendedor {
+    color: #8631a8;
+    font-size: 90%;
+    font-weight: bold;
+    text-align: left;
+}
+
+#precioActualBlue {
+    color: #01685f;
+    font-size: 90%;
+    font-weight: bold;
+    text-align: left;
+}
+
+#precioActualRose {
+    color: #c92a67;
+    font-size: 90%;
+    font-weight: bold;
+    text-align: left;
+}
+
+#precioActualGold {
+    color: #cf7f16;
+    font-size: 90%;
+    font-weight: bold;
+    text-align: left;
+}
+
+#precioActualEmerald {
+    color: #16cf79;
+    font-size: 90%;
+    font-weight: bold;
+    text-align: left;
+}
+
+#columna {
+    padding-bottom: 20px;
+}
+
+
+#sku_interno {
+    height: 300px;
+    width: 300px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.card-title {
+    font-size: 13px;
+    text-align: left;
     font-weight: bold;
 }
 
-#columna{
-    padding-bottom: 10px;
+.card-text {
+    font-size: 14px;
+    text-align: left;
 }
+
+#titulo_vd{
+    position: absolute;
+    top: 60px;
+    left: 170px;
+    font-size: 15px;
+    z-index: 2;
+}
+
+#img_globo{
+    position: absolute;
+    z-index: 1;
+}
+
+.go-top-container {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: 2.6rem;
+    height: 33px;
+    z-index: -1;
+}
+
+.go-top-button {
+    width: 0rem;
+    height: 0rem;
+    background-color: rgb(0, 121, 105);
+    border-radius: 50%;
+    cursor: pointer;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: -1;
+}
+
+
+.go-top-button i {
+    position: absolute;
+    font-size: 1.7rem;
+    top: 48%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    color: #fff;
+    transition: .2s;
+}
+
+.show {
+    z-index: 10;
+}
+
+.show .go-top-button {
+    animation: popup 1.5s ease-in-out;
+    width: 50px;
+    height: 50px;
+    z-index: 11;
+}
+

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -24,7 +25,8 @@
         <div class="container">
             <div class="wrapper">
                 <div class="header-item-left">
-                    <h1><a href="#" class="brand">Oboticário</a></h1>
+                    <h1><a href="#" class="brand">Oboticario</a></h1>
+                    <p><a id="titulo_vd" href="#" class="brand">VENTA DIRECTA</a></p>
                 </div>
                 <div class="header-item-center">
                     <div class="overlay"></div>
@@ -65,7 +67,7 @@
                                     </div>
                                 </div>
                             </li>
-                            <!--<li class="menu-item-has-children">
+                            <li class="menu-item-has-children">
                                 <a href="#">Productos <i class="fa-solid fa-chevron-down"></i></a>
                                 <div class="menu-subs menu-mega menu-column-4">
                                     <div class="list-item">
@@ -120,8 +122,8 @@
                                         <img src="img/imagen_productos.png" class="responsive" alt="Shop Product">
                                     </div>
                                 </div>
-                            </li>-->
-                            <!--<li class="menu-item-has-children">
+                            </li>
+                            <li class="menu-item-has-children">
                                 <a href="#">Regalos <i class="fa-solid fa-chevron-down"></i></a>
                                 <div class="menu-subs menu-column-1">
                                     <ul>
@@ -130,16 +132,16 @@
                                         <li><a href="#">Regalos De San Valentín</a></li>
                                     </ul>
                                 </div>
-                            </li>-->
-                            <!--<li class="menu-item-has-children">
+                            </li>
+                            <li class="menu-item-has-children">
                                 <a href="#">Promos Catálogo</a>
-                            </li>-->
-                            <!--<li><a href="#">FlashPromo</a></li>-->
+                            </li>
+                            <li><a href="#">FlashPromo</a></li>
                         </ul>
                     </nav>
                 </div>
                 <div class="header-item-right">
-                    <a href="#" class="menu-icon"><i class="fa-solid fa-magnifying-glass"></i></a>
+                    <button class="menu-icon" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"><i class="fa-solid fa-magnifying-glass"></i></button>
                     <a href="#" class="menu-icon"><i class="fa-solid fa-heart"></i></a>
                     <a href="#" class="menu-icon"><i class="fa-solid fa-cart-plus"></i></a>
                     <button type="button" class="menu-mobile-trigger">
@@ -148,6 +150,16 @@
                         <span></span>
                         <span></span>
                     </button>
+                </div>
+                <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+                    <div class="offcanvas-header">
+                        <h5 class="offcanvas-title" id="offcanvasRightLabel"><i class="fa-solid fa-magnifying-glass"></i></h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    </div>
+                    <hr>
+                    <div class="offcanvas-body">
+                        Más Buscado...
+                    </div>
                 </div>
             </div>
         </div>
@@ -195,25 +207,58 @@
             'pum'
             FROM `productos_emprendedor` WHERE `categoria` <=19 ";
             $resultSet = mysqli_query($conexion, $sql);
+
+            // Configuración del paginador
+            $resultsPerPage = 20; // Número de resultados por página
+            $totalResults = mysqli_num_rows($resultSet);
+            $totalPages = ceil($totalResults / $resultsPerPage);
+
+            // Obtener la página actual
+            if (!isset($_GET['page'])) {
+                $currentPage = 1;
+            } else {
+                $currentPage = $_GET['page'];
+                // Asegurarse de que la página actual sea un número válido y no menor a 1 o mayor al total de páginas
+                $currentPage = max(1, min($currentPage, $totalPages));
+            }
+
+            // Calcular el desplazamiento (offset) para la consulta
+            $offset = ($currentPage - 1) * $resultsPerPage;
+            $sql .= " LIMIT $offset, $resultsPerPage";
+            $resultSet = mysqli_query($conexion, $sql);
+
             while ($row = mysqli_fetch_row($resultSet)) {
             ?>
                 <div id="columna" class="col">
-                    <div class="card" style="width: auto;">
-                        <img src="img/img/<?php echo $row[1]; ?>" class="card-img-top" alt="...">
+                    <div id="card" class="card" style="width: auto;">
+                        <img id="sku_interno" src="img/img/<?php echo $row[1]; ?>" class="card-img-top" alt="...">
+                        <img id="img_globo" src="img/img/<?php echo $row[2]; ?>" class="card-img-top" alt="...">
                         <div id="card_img" class="card-body">
-                            <h5 class="card-title"><?php echo substr($row[3], 0, 30); ?></h5>
+                            <h5 class="card-title"><?php echo substr($row[3], 0, 35); ?></h5>
                             <p class="card-text"><?php echo substr($row[0], 0, 40); ?></p>
-                            <select id="segmento" class="form-select" aria-label="Default select example" onchange="actualizarPrecio()">
-                                <option value="1">Emprendedor: $10.000</option>
-                                <option value="2">Blue: 10.000</option>
-                                <option value="3">Rose: 20.000</option>
-                                <option value="4">Gold: 30.000</option>
-                                <option value="5">Emerald: 40.000</option>
-                            </select>
-                            <br>
                             <div class="row row-cols-2">
-                                <div id="precioActual" class="col">$<?php echo $row[6]; ?></div>
-                                <div id="tachado" class="col">$ <?php echo $row[4]; ?></div>
+                                <div id="precioActual" class="col">Precio Catalogo</div>
+                                <div id="tachado" class="col">$<?php echo $row[4]; ?></div>
+                            </div><br>
+                            <div class="row row-cols-2">
+                                <div id="precioActualEmprendedor" class="col"><i class="fa-solid fa-star"></i> Emprendedor:</div>
+                                <div id="tachadoEmprendedor" class="col">$<?php echo $row[4]; ?></div>
+                            </div>
+                            <div class="row row-cols-2">
+                                <div id="precioActualBlue" class="col"><i class="fa-solid fa-star"></i> Blue:</div>
+                                <div id="tachadoBlue" class="col">$<?php echo $row[4]; ?></div>
+                            </div>
+                            <div class="row row-cols-2">
+                                <div id="precioActualRose" class="col"><i class="fa-solid fa-star"></i> Rose:</div>
+                                <div id="tachadoRose" class="col">$<?php echo $row[4]; ?></div>
+                            </div>
+                            <div class="row row-cols-2">
+                                <div id="precioActualGold" class="col"><i class="fa-solid fa-star"></i> Gold:</div>
+                                <div id="tachadoGold" class="col">$<?php echo $row[4]; ?></div>
+                            </div>
+                            <div class="row row-cols-2">
+                                <div id="precioActualEmerald" class="col"><i class="fa-solid fa-star"></i> Emerald:</div>
+                                <div id="tachadoEmerald" class="col">$<?php echo $row[4]; ?></div>
                             </div>
                         </div>
                     </div>
@@ -222,24 +267,34 @@
         </div>
     </div>
     <nav aria-label="...">
-        <ul class="pagination">
-            <li class="page-item disabled">
-                <a class="page-link">Anterior</a>
-            </li>
-            <li class="page-item"><a class="page-link" href="#">1</a></li>
-            <li class="page-item active" aria-current="page">
-                <a class="page-link" href="#">2</a>
-            </li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item">
-                <a class="page-link" href="#">Siguiente</a>
-            </li>
+        <ul class="pagination justify-content-center ">
+            <?php
+            // Previous Page
+            echo '<li class="page-item ' . ($currentPage == 1 ? 'disabled' : '') . '">
+                <a class="page-link" href="?page=' . ($currentPage - 1) . '" tabindex="-1" aria-disabled="true">Anterior</a>
+              </li>';
+
+            // Page numbers
+            for ($page = 1; $page <= $totalPages; $page++) {
+                echo '<li class="page-item ' . ($page == $currentPage ? 'active' : '') . '">
+                    <a class="page-link" href="?page=' . $page . '">' . $page . '</a>
+                  </li>';
+            }
+
+            // Next Page
+            echo '<li class="page-item ' . ($currentPage == $totalPages ? 'disabled' : '') . '">
+                <a class="page-link" href="?page=' . ($currentPage + 1) . '">Siguiente</a>
+              </li>';
+            ?>
         </ul>
     </nav>
-    <div class="article">
-        <h1>Hola mundo</h1>
+    <div class="go-top-container">
+        <div class="go-top-button">
+            <i class="fas fa-chevron-up"></i>
+        </div>
     </div>
     <script src="js/menu.js"></script>
+    <script src="js/script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
 </body>
 
